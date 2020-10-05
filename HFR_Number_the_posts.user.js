@@ -10,11 +10,12 @@
 
 
 //  Historique
-// 02/10/2020   Création.   v 0.1.0
+// 05/10/2020   Création.   v 0.1.0
 
 
 
-let isUnder = false;    // Option de position du numéro de post dans la toolbar : false = à la suite à droite, true = en dessous
+let isUnder = false;    // Option de position du numéro de post dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
+
 
 let toolbarColl = document.getElementsByClassName("toolbar");    // collection
 
@@ -22,21 +23,14 @@ let count = 1;
 
 for (let toolBar of toolbarColl)  { 
 
+  let hashText = document.createTextNode('#'+count);  
+  
   if (isUnder) {
-
-    let newSpan = document.createElement('span');
-
-    newSpan.textContent = "#" + count;
-
-    //newP.style.fontWeight = 'bold';
-
-    toolBar.append(newSpan);
+    
+    toolBar.append(hashText);
   }
 
-
   else {
-
-    let hashText = document.createTextNode('#'+count);
 
     toolBar.prepend(hashText);
   }
