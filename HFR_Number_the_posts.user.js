@@ -1,15 +1,17 @@
 // ==UserScript==
-// @name        [HFR] Number the posts
+// @name        [HFR] Number the posts - First gen
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.3.0
+// @version     0.3.1
 // @author      Lt Ripley
-// @description Numérote les posts des pages des topics HFR
+// @description Numérote les posts des pages des topics HFR et affiche le titre
+//              Ancienne generation, compatible avec [HFR] Chat de DdsT. 
 // ==/UserScript==
 
 
 //  Historique
+// 21/03/2021   Upgrade     v 0.3.1  Ajout du titre du topic.  Création d'une branch dédiée sur github
 // 16/03/2020   Upgrade     v 0.3.0  Ajout du numéro de page
 // 20/10/2020   Correction  v 0.2.2  Prise en charge des urls .htm
 // 15/10/2020   Correction  v 0.2.1  Correction d'un bug : page qui plante quand le topic n'a qu'une seule page ('page' n'est pas présent dans l'URL).
@@ -22,6 +24,7 @@
 let isUnder = false; // Option de position des numéros de post dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
 let totalToo = true; // Option pour afficher à coté le total des posts depuis le début.  Mettre true = oui, false = non,
 let pageNumber = true;  // Option pour afficher le numéro de page.  True = activé, False = désactivé
+let displaySujet = true; // option pour afficher le titre du topic.  true = activé, False = désactivé
 
 
 let toolbarCollection = document.getElementsByClassName("toolbar");
@@ -31,6 +34,7 @@ if ( document.getElementById("md_arbo_tree_1") && document.getElementById("md_ar
     let url = document.location.href;
     var currentPageNumber = getCurrentPage(url);
     var totalPostsInFullPages = countTotalPostsInFullPages(currentPageNumber);
+    if (displaySujet)  {var sujet = getSujet()}
 }
 
 let count = 0;  // post
@@ -42,12 +46,15 @@ if (currentPageNumber < 2) {
 
 for (let toolBar of toolbarCollection) {
 
-    let text = 'msg '+count;
+    let text = '\u00A0\u00A0 msg '+count;
     if (totalToo) {
         text+=' | total : '+ (totalPostsInFullPages+count);
     }
     if (pageNumber)  {
       text+= ' | page ' + (currentPageNumber);
+    }
+    if (displaySujet)  {
+      text+= '\u00A0\u00A0\u00A0\u00A0\u00A0' + (sujet)
     }
     let textToDisplay = document.createTextNode(text);
 
@@ -55,6 +62,8 @@ for (let toolBar of toolbarCollection) {
 
     count++;
 }
+
+
 
 
 function getCurrentPage(url) {  // recup le numero de page
@@ -98,4 +107,10 @@ function countTotalPostsInFullPages(numberOfPages) {
     else {totalOfPosts = 0;}
 
     return totalOfPosts;
+}
+
+
+function getSujet ()  {
+  
+  return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
 }
