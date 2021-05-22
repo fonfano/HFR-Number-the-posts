@@ -5,7 +5,7 @@
 // @grant       none
 // @version     0.3.1
 // @author      Lt Ripley
-// @description Numérote les posts des pages des topics HFR et affiche le titre
+// @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 //              Ancienne generation, compatible avec [HFR] Chat de DdsT. 
 // ==/UserScript==
 
