@@ -30,7 +30,7 @@ let displayTotal = true; // Option pour afficher à coté le total des posts dep
 let displayPageNumber = true;  // Option pour afficher le numéro de page.  true = activé, False = désactivé
 let displaySujet = true; // Option pour afficher le titre du topic.  true = activé, False = désactivé
 let numbersColour = '#000000'; // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let titleColour = '#F000000';  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let titleColour = '#000000';  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
 let shortenTitleValue = 200; // Option. Valeur en nombre de caractères pour tronquer le sujet.
 //
 
