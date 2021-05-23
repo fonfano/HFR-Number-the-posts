@@ -3,7 +3,7 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.3.1
+// @version     0.3.2
 // @author      Lt Ripley
 // @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 //              Ancienne generation, compatible avec [HFR] Chat de DdsT. 
@@ -11,6 +11,7 @@
 
 
 //  Historique
+// 23/05-2021   Upgrade     v 0.3.2  Ajout option troncage du titre pour les petits affichages
 // 21/03/2021   Upgrade     v 0.3.1  Ajout du titre du topic.  Création d'une branch dédiée sur github
 // 16/03/2020   Upgrade     v 0.3.0  Ajout du numéro de page
 // 20/10/2020   Correction  v 0.2.2  Prise en charge des urls .htm
@@ -20,11 +21,14 @@
 // 05/10/2020   Création.   v 0.1.0
 
 
+// OPTIONS
+let isUnder = false;          // Option de position des numéros de post dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
+let displayTotal = true;      // Option pour afficher à coté le total des posts depuis le début.  True = activé, False = désactivé
+let displayPageNumber = true; // Option pour afficher le numéro de page.  True = activé, False = désactivé
+let displaySujet = true;      // Option pour afficher le titre du topic.  true = activé, False = désactivé
+let shortenTitleValue = 200;  // Option. Valeur en nombre de caractères pour tronquer le sujet.
+//
 
-let isUnder = false; // Option de position des numéros de post dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
-let totalToo = true; // Option pour afficher à coté le total des posts depuis le début.  Mettre true = oui, false = non,
-let pageNumber = true;  // Option pour afficher le numéro de page.  True = activé, False = désactivé
-let displaySujet = true; // option pour afficher le titre du topic.  true = activé, False = désactivé
 
 
 let toolbarCollection = document.getElementsByClassName("toolbar");
@@ -34,7 +38,10 @@ if ( document.getElementById("md_arbo_tree_1") && document.getElementById("md_ar
     let url = document.location.href;
     var currentPageNumber = getCurrentPage(url);
     var totalPostsInFullPages = countTotalPostsInFullPages(currentPageNumber);
-    if (displaySujet)  {var sujet = getSujet()}
+    if (displaySujet)  {
+      var sujet = getSujet()
+      sujet = shortenTitle(sujet, shortenTitleValue);
+    }
 }
 
 let count = 0;  // post
@@ -47,10 +54,10 @@ if (currentPageNumber < 2) {
 for (let toolBar of toolbarCollection) {
 
     let text = '\u00A0\u00A0 msg '+count;
-    if (totalToo) {
+    if (displayTotal) {
         text+=' | total : '+ (totalPostsInFullPages+count);
     }
-    if (pageNumber)  {
+    if (displayPageNumber)  {
       text+= ' | page ' + (currentPageNumber);
     }
     if (displaySujet)  {
@@ -113,4 +120,14 @@ function countTotalPostsInFullPages(numberOfPages) {
 function getSujet ()  {
   
   return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
+}
+
+
+function shortenTitle(title, index)  {
+  
+  let title2 = title.substring(0, index)
+  
+  if (title2 < title)  {title2 += '...'}
+  
+  return title2
 }
