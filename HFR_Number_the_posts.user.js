@@ -3,7 +3,7 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.4.2
+// @version     0.4.3
 // @author      Lt Ripley
 // @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 // ==/UserScript==
@@ -12,6 +12,7 @@
 // Merci à Roger21 pour toute son aide précieuse sur HFR !
 
 //  Historique
+// 23/05/2021   Upgrade     v 0.4.3  Ajout option pour tronquer le titre du sujet 
 // 23/05/2021   Upgrade     v 0.4.2  Nouveau code pour récupérer le titre, fonctionne avec les caractères spéciaux
 // 18/05/2021   Upgrade     v 0.4.1  Ajout de la possibilité de colorer le texte + simplification du code
 // 18/05/2021   Upgrade     v 0.4.0  Ajout du titre du topic 
@@ -28,8 +29,9 @@ let isUnder = false; // Option de position du texte dans la toolbar : mettre fal
 let displayTotal = true; // Option pour afficher à coté le total des posts depuis le début.  Mettre true = oui, false = non,
 let displayPageNumber = true;  // Option pour afficher le numéro de page.  true = activé, False = désactivé
 let displaySujet = true; // Option pour afficher le titre du topic.  true = activé, False = désactivé
-let numbersColour = '#000000' // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let titleColour = '#F000000'  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let numbersColour = '#000000'; // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let titleColour = '#F000000';  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let shortenTitleValue = 200; // Option. Valeur en nombre de caractères pour tronquer le sujet.
 //
 
 
@@ -40,7 +42,11 @@ if ( document.getElementById("md_arbo_tree_1") && document.getElementById("md_ar
   let url = document.location.href;
   var currentPageNumber = getCurrentPage(url);
   var totalPostsInFullPages = countTotalPostsInFullPages(currentPageNumber);
-  if (displaySujet) {var sujet = getSujet();}
+  if (displaySujet) {
+    var sujet = getSujet();
+    sujet = shortenTitle(sujet, shortenTitleValue);
+  }
+  
 }
 
 let count = 0;  // post
@@ -66,7 +72,7 @@ for (let toolBar of toolBarCollection) {
   maDiv.style.color = numbersColour;
 
   if(displaySujet)  {
-    let monSpan =  document.createElement("span" );
+    let monSpan = document.createElement("span" );
     monSpan.appendChild(document.createTextNode(sujet)); // le titre du topic
     monSpan.style.marginLeft = "20px";
     monSpan.style.color = titleColour;
@@ -140,4 +146,14 @@ function getSujet ()  {
    
   return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
   
+}
+
+
+function shortenTitle(title, index)  {
+  
+  let title2 = title.substring(0, index)
+  
+  if (title2 < title)  {title2 += '...'}
+  
+  return title2
 }
