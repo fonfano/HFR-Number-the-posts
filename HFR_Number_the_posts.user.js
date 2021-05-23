@@ -3,15 +3,16 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.4.1
+// @version     0.4.2
 // @author      Lt Ripley
-// @description Numérote les posts des pages des topics HFR et affiche le titre du topic dans les posts
+// @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 // ==/UserScript==
 
 
 // Merci à Roger21 pour toute son aide précieuse sur HFR !
 
 //  Historique
+// 23/05/2021   Upgrade     v 0.4.2  Nouveau code pour récupérer le titre, fonctionne avec les caractères spéciaux
 // 18/05/2021   Upgrade     v 0.4.1  Ajout de la possibilité de colorer le texte + simplification du code
 // 18/05/2021   Upgrade     v 0.4.0  Ajout du titre du topic 
 // 16/03/2020   Upgrade     v 0.3.0  Ajout du numéro de page
@@ -28,7 +29,7 @@ let displayTotal = true; // Option pour afficher à coté le total des posts dep
 let displayPageNumber = true;  // Option pour afficher le numéro de page.  true = activé, False = désactivé
 let displaySujet = true; // Option pour afficher le titre du topic.  true = activé, False = désactivé
 let numbersColour = '#000000' // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let titleColour = '#000000'  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let titleColour = '#F000000'  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
 //
 
 
@@ -136,14 +137,7 @@ function countTotalPostsInFullPages(numberOfPages) {
 
 
 function getSujet ()  {
-  
-  let preSujet = document.getElementsByClassName('padding')[2].innerHTML;
-  
-  let indexForName1 = preSujet.indexOf('<h3>')+4;
-  let indexForName2 = preSujet.indexOf('</h3>');
-  
-  let title = preSujet.substring(indexForName1, indexForName2); 
-  
-  return title;
+   
+  return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
   
 }
