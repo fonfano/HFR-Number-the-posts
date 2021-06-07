@@ -3,7 +3,7 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.4.3
+// @version     0.4.4
 // @author      Lt Ripley
 // @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 // ==/UserScript==
@@ -12,6 +12,7 @@
 // Merci à Roger21 pour toute son aide précieuse sur HFR !
 
 //  Historique
+// 07/06/2021   Upgrade     v 0.4.4  Amélioration des marges (esthetique) 
 // 23/05/2021   Upgrade     v 0.4.3  Ajout option pour tronquer le titre du sujet 
 // 23/05/2021   Upgrade     v 0.4.2  Nouveau code pour récupérer le titre, fonctionne avec les caractères spéciaux
 // 18/05/2021   Upgrade     v 0.4.1  Ajout de la possibilité de colorer le texte + simplification du code
@@ -25,13 +26,13 @@
 
 
 // OPTIONS
-let isUnder = false; // Option de position du texte dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
-let displayTotal = true; // Option pour afficher à coté le total des posts depuis le début.  Mettre true = oui, false = non,
-let displayPageNumber = true;  // Option pour afficher le numéro de page.  true = activé, False = désactivé
-let displaySujet = true; // Option pour afficher le titre du topic.  true = activé, False = désactivé
-let numbersColour = '#000000'; // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let titleColour = '#000000';  // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let shortenTitleValue = 200; // Option. Valeur en nombre de caractères pour tronquer le sujet.
+let isUnder = false;            // Option de position du texte dans la toolbar : mettre false = à la suite à droite, mettre true = en dessous
+let displayTotal = true;        // Option pour afficher à coté le total des posts depuis le début.  true = activé, False = désactivé
+let displayPageNumber = true;   // Option pour afficher le numéro de page.  true = activé, False = désactivé
+let displaySujet = true;        // Option pour afficher le titre du topic.  true = activé, False = désactivé
+let numbersColour = '#000000';  // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let titleColour = '#000000';    // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let shortenTitleValue = 200;    // Option. Valeur en nombre de caractères pour tronquer le sujet.
 //
 
 
@@ -74,15 +75,18 @@ for (let toolBar of toolBarCollection) {
   if(displaySujet)  {
     let monSpan = document.createElement("span" );
     monSpan.appendChild(document.createTextNode(sujet)); // le titre du topic
-    monSpan.style.marginLeft = "20px";
+    monSpan.style.marginLeft = "15px";
     monSpan.style.color = titleColour;
     maDiv.appendChild(monSpan);
   }
 
   if (!isUnder)  {  
     maDiv.setAttribute("class", "left" );
-    maDiv.style.marginLeft = "20px";
-    toolBar.insertBefore(maDiv, toolBar.querySelector("div.spacer" ));  // insérer avant le spacer
+    //maDiv.style.cssFloat = "left";  // en lieu et place du setAttribute au dessus, pour la compat avec [HFR]Bookmarks avant la modif du dev
+    maDiv.style.marginLeft = "12px";
+    maDiv.style.marginTop = "2px";  // 2 ou 3 = milieu, 7 = en bas
+    
+    toolBar.insertBefore(maDiv, toolBar.querySelector("div.spacer" ));  // insérer avant le spacer qui est dessous
   }
 
   else {
