@@ -3,7 +3,7 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.4.4
+// @version     0.4.5
 // @author      Lt Ripley
 // @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 // ==/UserScript==
@@ -12,6 +12,7 @@
 // Merci à Roger21 pour toute son aide précieuse sur HFR !
 
 //  Historique
+// 30/08/2021   Upgrade     v 0.4.5  Fonctionne dans les MPs
 // 07/06/2021   Upgrade     v 0.4.4  Amélioration des marges (esthetique) 
 // 23/05/2021   Upgrade     v 0.4.3  Ajout option pour tronquer le titre du sujet 
 // 23/05/2021   Upgrade     v 0.4.2  Nouveau code pour récupérer le titre, fonctionne avec les caractères spéciaux
@@ -31,7 +32,7 @@ let displayTotal = true;        // Option pour afficher à coté le total des po
 let displayPageNumber = true;   // Option pour afficher le numéro de page.  true = activé, False = désactivé
 let displaySujet = true;        // Option pour afficher le titre du topic.  true = activé, False = désactivé
 let numbersColour = '#000000';  // Option pour colorer les chiffres, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
-let titleColour = '#000000';    // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
+let titleColour = '#F18F18';    // Option pour colorer le titre, exemples : '#000000' = noir d'origine, et '#F18F18' = orange HFR
 let shortenTitleValue = 200;    // Option. Valeur en nombre de caractères pour tronquer le sujet.
 //
 
@@ -148,7 +149,13 @@ function countTotalPostsInFullPages(numberOfPages) {
 
 function getSujet ()  {
    
+  if (document.querySelector("table.main th.padding > div.left > h3" ))  {
   return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
+  }
+    
+  if (document.querySelector("#mesdiscussions > table.main > tbody > tr.cBackHeader.fondForum2Title > th.padding > h3"))  {
+  return document.querySelector("#mesdiscussions > table.main > tbody > tr.cBackHeader.fondForum2Title > th.padding > h3").textContent.trim();
+  }
   
 }
 
