@@ -3,7 +3,7 @@
 // @namespace   github.com/fonfano
 // @match       https://forum.hardware.fr/*
 // @grant       none
-// @version     0.3.2
+// @version     0.3.3
 // @author      Lt Ripley
 // @description Numérote les posts des pages des topics HFR et rappelle le titre du topic
 //              Ancienne generation, compatible avec [HFR] Chat de DdsT. 
@@ -11,6 +11,7 @@
 
 
 //  Historique
+// 30/08-2021   Upgrade     v 0.3.3  Fonctionne avec les MPs
 // 23/05-2021   Upgrade     v 0.3.2  Ajout option troncage du titre pour les petits affichages
 // 21/03/2021   Upgrade     v 0.3.1  Ajout du titre du topic.  Création d'une branch dédiée sur github
 // 16/03/2020   Upgrade     v 0.3.0  Ajout du numéro de page
@@ -119,7 +120,14 @@ function countTotalPostsInFullPages(numberOfPages) {
 
 function getSujet ()  {
   
+  if (document.querySelector("table.main th.padding > div.left > h3" ))  {
   return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
+  }
+    
+  if (document.querySelector("#mesdiscussions > table.main > tbody > tr.cBackHeader.fondForum2Title > th.padding > h3"))  {
+  return document.querySelector("#mesdiscussions > table.main > tbody > tr.cBackHeader.fondForum2Title > th.padding > h3").textContent.trim();
+  }
+  // old : return document.querySelector("table.main th.padding > div.left > h3" ).textContent.trim();
 }
 
 
